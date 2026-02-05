@@ -84,11 +84,13 @@ p { font-size: 16px; }
 
 /* БУТОНИ */
 .buttons {
-    position: relative;
-    height: 60px;
-    margin-top: 26px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
+    margin-top: 26px;
+    height: 150px; /* по-голяма височина за движение */
+    padding: 0 20px;
+    position: relative;
 }
 
 button {
@@ -104,19 +106,23 @@ button {
     justify-content: center;
 }
 
+.left-container,
+.right-container {
+    flex: 1;
+    position: relative;
+}
+
+
 #yesBtn {
-    margin-right: auto;
-    z-index: 2;
+    width: 140px;
+    height: 52px;
 }
 
 #noBtn {
-    position: absolute;
-    right: 0;
-    top: 4px;
-    background: white;
-    color: #ff2d55;
-    z-index: 1;
-    transition: left 0.15s ease, top 0.15s ease;
+    width: 140px;
+    height: 52px;
+    position: absolute; /* да можем да го движим в рамките на десния контейнер */
+    transition: left 0.2s ease, top 0.2s ease;
 }
 
 /* RESULT */
@@ -145,8 +151,12 @@ button {
         <h1>💘 Ще бъдеш ли моя валентинка? 💘</h1>
 
         <div class="buttons">
-            <button id="yesBtn">Да 💖</button>
-            <button id="noBtn">Не 🙃</button>
+            <div class="left-container">
+                <button id="yesBtn">Да 💖</button>
+            </div>
+            <div class="right-container">
+                <button id="noBtn">Не 🙃</button>
+            </div>
         </div>
     </div>
 </div>
@@ -190,41 +200,37 @@ function escapeNo() {
         noBtn.textContent = "Стига де 😅";
     }
 
-    const container = document.querySelector(".buttons");
+    const rightContainer = document.querySelector(".right-container");
     const yesRect = yesBtn.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
+    const containerRect = rightContainer.getBoundingClientRect();
 
-    const minDistance = 80; // минимално разстояние от старата позиция и „Да“ бутона
+    const minDistance = 80;
 
-    const maxX = container.offsetWidth - noBtn.offsetWidth;
-    const maxY = container.offsetHeight - noBtn.offsetHeight;
+    const maxX = containerRect.width - noBtn.offsetWidth;
+    const maxY = containerRect.height - noBtn.offsetHeight;
 
     let newX, newY;
     let tries = 0;
 
     do {
-        // хаотично движение в дясната половина + малко вертикално
-        newX = container.offsetWidth / 2 + Math.random() * (maxX - container.offsetWidth / 2);
+        newX = Math.random() * maxX;
         newY = Math.random() * maxY;
 
-        tries++;
-        // гарантираме, че не пресича бутона „Да“
         const noRect = {
-            left: newX,
-            right: newX + noBtn.offsetWidth,
-            top: newY,
-            bottom: newY + noBtn.offsetHeight
+            left: newX + containerRect.left,
+            right: newX + containerRect.left + noBtn.offsetWidth,
+            top: newY + containerRect.top,
+            bottom: newY + containerRect.top + noBtn.offsetHeight
         };
 
-        // проверка за overlap с „Да“
         const overlap = !(noRect.right + minDistance < yesRect.left ||
                           noRect.left - minDistance > yesRect.right ||
                           noRect.bottom + minDistance < yesRect.top ||
                           noRect.top - minDistance > yesRect.bottom);
 
-        // прекъсваме след 20 опита за сигурност
         if (!overlap || tries > 20) break;
 
+        tries++;
     } while(true);
 
     noBtn.style.left = newX + "px";
@@ -262,6 +268,7 @@ setInterval(createHeart, 450);
 
 </body>
 </html>
+
 
 
 
