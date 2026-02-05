@@ -89,12 +89,13 @@ p { font-size: 16px; }
     margin-top: 26px;
 }
 
-button {
-    padding: 14px 28px;
-    font-size: 18px;
-    border-radius: 32px;
-    border: none;
-    touch-action: manipulation;
+.buttons {
+    position: relative;
+    height: 90px;
+    margin-top: 26px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 #yesBtn {
@@ -106,7 +107,7 @@ button {
     background: white;
     color: #ff2d55;
     position: absolute;
-    left: 50%;
+    right: 0;
     top: 0;
 }
 
@@ -221,3 +222,4 @@ setInterval(createHeart, 450);
 
 </body>
 </html>
+
