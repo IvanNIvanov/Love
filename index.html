@@ -191,31 +191,48 @@ function escapeNo() {
     }
 
     const container = document.querySelector(".buttons");
+    const yesRect = yesBtn.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
 
-    const leftLimit = container.offsetWidth / 2;
-    const rightLimit = container.offsetWidth - noBtn.offsetWidth;
+    const minDistance = 80; // минимално разстояние от старата позиция и „Да“ бутона
+
+    const maxX = container.offsetWidth - noBtn.offsetWidth;
     const maxY = container.offsetHeight - noBtn.offsetHeight;
 
-    // добавяме "избягване": избираме нова позиция поне 60px далече от старата
-    let newX = leftLimit + Math.random() * (rightLimit - leftLimit);
-    let newY = Math.random() * maxY;
+    let newX, newY;
+    let tries = 0;
 
-    const currentX = parseFloat(noBtn.style.left) || 0;
-    const currentY = parseFloat(noBtn.style.top) || 0;
+    do {
+        // хаотично движение в дясната половина + малко вертикално
+        newX = container.offsetWidth / 2 + Math.random() * (maxX - container.offsetWidth / 2);
+        newY = Math.random() * maxY;
 
-    // ако е твърде близо, просто прехвърляме с +60 или -60 пиксела
-    if (Math.abs(newX - currentX) < 60) {
-        newX = (newX + 60 > rightLimit) ? leftLimit : newX + 60;
-    }
-    if (Math.abs(newY - currentY) < 60) {
-        newY = (newY + 60 > maxY) ? 0 : newY + 60;
-    }
+        tries++;
+        // гарантираме, че не пресича бутона „Да“
+        const noRect = {
+            left: newX,
+            right: newX + noBtn.offsetWidth,
+            top: newY,
+            bottom: newY + noBtn.offsetHeight
+        };
+
+        // проверка за overlap с „Да“
+        const overlap = !(noRect.right + minDistance < yesRect.left ||
+                          noRect.left - minDistance > yesRect.right ||
+                          noRect.bottom + minDistance < yesRect.top ||
+                          noRect.top - minDistance > yesRect.bottom);
+
+        // прекъсваме след 20 опита за сигурност
+        if (!overlap || tries > 20) break;
+
+    } while(true);
 
     noBtn.style.left = newX + "px";
     noBtn.style.top = newY + "px";
 
     vibrate();
 }
+
 
 /* TOUCH-FIRST */
 noBtn.addEventListener("touchstart", escapeNo, { passive: true });
@@ -245,6 +262,7 @@ setInterval(createHeart, 450);
 
 </body>
 </html>
+
 
 
 
