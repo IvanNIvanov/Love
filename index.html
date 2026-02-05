@@ -198,13 +198,22 @@ function escapeNo() {
 
     const minDistance = 50; // минимално разстояние от стара позиция
 
+    // вземаме текущите позиции (0 ако не са зададени)
+    const currentX = noBtn.offsetLeft || 0;
+    const currentY = noBtn.offsetTop || 0;
+
     let newX, newY;
+    let tries = 0;
+
     do {
         newX = leftLimit + Math.random() * (rightLimit - leftLimit);
         newY = Math.random() * maxY;
+        tries++;
+        // ако случайно не успее да намери добра позиция след 10 опита, прекъсваме
+        if (tries > 10) break;
     } while (
-        Math.abs(newX - noBtn.offsetLeft) < minDistance &&
-        Math.abs(newY - noBtn.offsetTop) < minDistance
+        Math.abs(newX - currentX) < minDistance &&
+        Math.abs(newY - currentY) < minDistance
     );
 
     noBtn.style.left = newX + "px";
@@ -241,6 +250,7 @@ setInterval(createHeart, 450);
 
 </body>
 </html>
+
 
 
 
