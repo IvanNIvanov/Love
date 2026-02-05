@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>💖 Св. Валентин 💖</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #ff4e7a, #ff9ebc);
+    height: 100vh;
+    overflow: hidden;
+    color: white;
+}
+
+/* СЪРЦА */
+.heart {
+    position: fixed;
+    bottom: -30px;
+    font-size: 22px;
+    animation: floatUp linear infinite;
+    opacity: 0.75;
+    pointer-events: none;
+}
+
+@keyframes floatUp {
+    from { transform: translateY(0); }
+    to { transform: translateY(-120vh); }
+}
+
+/* КАРТИ */
+.card {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.92);
+}
+
+.content {
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(12px);
+    border-radius: 26px;
+    padding: 26px;
+    width: 100%;
+    max-width: 360px;
+    text-align: center;
+    box-shadow: 0 25px 45px rgba(0,0,0,0.35);
+}
+
+h1 {
+    font-size: 22px;
+    margin-bottom: 14px;
+}
+
+p { font-size: 16px; }
+
+.photos {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.photos img {
+    width: 110px;
+    height: 110px;
+    border-radius: 16px;
+    object-fit: cover;
+    border: 3px solid rgba(255,255,255,0.6);
+}
+
+/* БУТОНИ */
+.buttons {
+    position: relative;
+    height: 90px;
+    margin-top: 26px;
+}
+
+button {
+    padding: 14px 28px;
+    font-size: 18px;
+    border-radius: 32px;
+    border: none;
+    touch-action: manipulation;
+}
+
+#yesBtn {
+    background: #ff2d55;
+    color: white;
+}
+
+#noBtn {
+    background: white;
+    color: #ff2d55;
+    position: absolute;
+    left: 50%;
+    top: 0;
+}
+
+/* RESULT */
+.result img {
+    width: 200px;
+    margin: 16px 0;
+    border-radius: 16px;
+}
+</style>
+</head>
+
+<body>
+
+<audio id="music" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ВЪПРОС -->
+<div class="card" id="question">
+    <div class="content">
+        <div class="photos">
+            <img src="photo1.jpg">
+            <img src="photo2.jpg">
+        </div>
+
+        <h1>💘 Ще бъдеш ли моя валентинка? 💘</h1>
+
+        <div class="buttons">
+            <button id="yesBtn">Да 💖</button>
+            <button id="noBtn">Не 🙃</button>
+        </div>
+    </div>
+</div>
+
+<!-- РЕЗУЛТАТ -->
+<div class="card hidden" id="result">
+    <div class="content result">
+        <h1>🥰 Благодаря!</h1>
+        <p>Направи правилния избор и ме направи<br><b>ужасно щастлив</b> ❤️</p>
+
+        <img src="happy.gif">
+
+        <div class="photos">
+            <img src="photo3.jpg">
+            <img src="photo4.jpg">
+        </div>
+    </div>
+</div>
+
+<script>
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const question = document.getElementById("question");
+const result = document.getElementById("result");
+const music = document.getElementById("music");
+
+let noCount = 0;
+
+/* ВИБРАЦИЯ (ANDROID SAFE) */
+function vibrate() {
+    if (navigator.vibrate) {
+        navigator.vibrate(40);
+    }
+}
+
+/* НЕ БУТОН – БЯГА */
+function escapeNo() {
+    noCount++;
+
+    if (noCount >= 5) {
+        noBtn.textContent = "Стига де 😅";
+    }
+
+    const maxX = 220;
+    const maxY = 70;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+
+    vibrate();
+}
+
+/* TOUCH-FIRST */
+noBtn.addEventListener("touchstart", escapeNo, { passive: true });
+noBtn.addEventListener("mouseover", escapeNo);
+
+/* ДА */
+yesBtn.addEventListener("click", () => {
+    music.play();
+    question.classList.add("hidden");
+    result.classList.remove("hidden");
+});
+
+/* ПЛАВАЩИ СЪРЦА */
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.textContent = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (4 + Math.random() * 4) + "s";
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 9000);
+}
+
+setInterval(createHeart, 450);
+</script>
+
+</body>
+</html>
