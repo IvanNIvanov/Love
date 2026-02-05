@@ -85,7 +85,7 @@ p { font-size: 16px; }
 /* БУТОНИ */
 .buttons {
     position: relative;
-    height: 90px;
+    height: 60px;
     margin-top: 26px;
     display: flex;
     justify-content: space-between;
@@ -93,11 +93,16 @@ p { font-size: 16px; }
 }
 
 button {
-    padding: 14px 28px;
+    padding: 14px 0;
     font-size: 18px;
     border-radius: 32px;
     border: none;
     touch-action: manipulation;
+    width: 140px;              /* 🔒 фиксирана ширина */
+    height: 52px;              /* 🔒 фиксирана височина */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #yesBtn {
@@ -110,7 +115,8 @@ button {
     color: #ff2d55;
     position: absolute;
     right: 0;
-    top: 0;
+    top: 4px; /* лека визуална центровка */
+    transition: left 0.15s ease, top 0.15s ease;
 }
 
 /* RESULT */
@@ -180,12 +186,13 @@ function vibrate() {
 function escapeNo() {
     noCount++;
 
-    if (noCount >= 5) {
+    if (noCount === 5) {
         noBtn.textContent = "Стига де 😅";
     }
 
-    const maxX = 220;
-    const maxY = 70;
+    const container = document.querySelector(".buttons");
+    const maxX = container.offsetWidth - noBtn.offsetWidth;
+    const maxY = container.offsetHeight - noBtn.offsetHeight;
 
     const x = Math.random() * maxX;
     const y = Math.random() * maxY;
@@ -224,5 +231,6 @@ setInterval(createHeart, 450);
 
 </body>
 </html>
+
 
 
