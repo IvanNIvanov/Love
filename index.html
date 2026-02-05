@@ -88,7 +88,6 @@ p { font-size: 16px; }
     height: 60px;
     margin-top: 26px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
 }
 
@@ -106,16 +105,17 @@ button {
 }
 
 #yesBtn {
-    background: #ff2d55;
-    color: white;
+    margin-right: auto;
+    z-index: 2;
 }
 
 #noBtn {
-    background: white;
-    color: #ff2d55;
     position: absolute;
     right: 0;
-    top: 4px; /* лека визуална центровка */
+    top: 4px;
+    background: white;
+    color: #ff2d55;
+    z-index: 1;
     transition: left 0.15s ease, top 0.15s ease;
 }
 
@@ -191,10 +191,13 @@ function escapeNo() {
     }
 
     const container = document.querySelector(".buttons");
-    const maxX = container.offsetWidth - noBtn.offsetWidth;
+
+    const leftLimit = container.offsetWidth / 2;
+    const rightLimit = container.offsetWidth - noBtn.offsetWidth;
+
     const maxY = container.offsetHeight - noBtn.offsetHeight;
 
-    const x = Math.random() * maxX;
+    const x = leftLimit + Math.random() * (rightLimit - leftLimit);
     const y = Math.random() * maxY;
 
     noBtn.style.left = x + "px";
@@ -231,6 +234,7 @@ setInterval(createHeart, 450);
 
 </body>
 </html>
+
 
 
 
