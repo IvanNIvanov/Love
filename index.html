@@ -86,10 +86,17 @@ h2 {
 }
 
 /* Photos */
-.photos, .photo-together {
+.photos {
   display: flex;
   justify-content: center;
   gap: 14px;
+  margin-bottom: 26px;
+}
+
+.photo-together {
+  display: flex;
+  flex-direction: column; /* ⬇️ важно */
+  align-items: center;
   margin-bottom: 26px;
 }
 
@@ -107,14 +114,16 @@ h2 {
 }
 
 .photo-together img {
-  width: 230px;
-  height: 290px;
+  width: 100%;
+  max-width: 320px;
+  height: 190px; /* landscape */
   object-fit: cover;
   border-radius: 26px;
   box-shadow: 0 18px 45px rgba(255,77,109,0.5);
 
-  filter: blur(8px);
-  transform: scale(1.05);
+  /* стартово състояние */
+  filter: blur(10px);
+  transform: translateY(20px) scale(1.04);
   opacity: 0;
 
   transition:
@@ -124,7 +133,8 @@ h2 {
 }
 
 .love-text {
-  margin-top: 14px;
+  margin-top: 16px;
+  text-align: center;
   font-size: 20px;
   font-weight: 600;
   color: #ff4d6d;
@@ -134,7 +144,7 @@ h2 {
 
 .photo-together.show img {
   filter: blur(0);
-  transform: scale(1);
+  transform: translateY(0) scale(1);
   opacity: 1;
 }
 
@@ -354,6 +364,7 @@ setInterval(createHeart, 250);
 
 </body>
 </html>
+
 
 
 
