@@ -112,18 +112,44 @@ h2 {
   object-fit: cover;
   border-radius: 26px;
   box-shadow: 0 18px 45px rgba(255,77,109,0.5);
-  animation: fadeIn 0.8s ease;
+
+  filter: blur(8px);
+  transform: scale(1.05);
+  opacity: 0;
+
+  transition:
+    filter 0.8s ease,
+    transform 0.8s ease,
+    opacity 0.6s ease;
 }
 
 .love-text {
   margin-top: 14px;
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 600;
   color: #ff4d6d;
   font-family: "Playfair Display", serif;
-  animation: fadeIn 1.2s ease;
+  animation: loveBeat 1.6s infinite;
 }
 
+.photo-together.show img {
+  filter: blur(0);
+  transform: scale(1);
+  opacity: 1;
+}
+
+@keyframes loveBeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.12);
+  }
+  60% {
+    transform: scale(1);
+  }
+}
+  
 @keyframes fadeIn {
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
@@ -151,6 +177,36 @@ button {
   box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
 
+  .fade-out {
+  animation: fadeOutUp 0.45s ease forwards;
+}
+
+.fade-in {
+  animation: fadeInDown 0.6s ease forwards;
+}
+
+@keyframes fadeOutUp {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+  
 #yes {
   left: 12%;
   background: linear-gradient(135deg, #ff4d6d, #ff758f);
@@ -252,9 +308,26 @@ yesBtn.addEventListener("click", () => {
   yesSound.play();
   bgMusic.play();
 
-  document.getElementById("mainTitle").innerHTML = "🎀Правилен избор🎀<br>Благодаря ти, че внасяш светлина в живота ми всеки ден.";
+  const title = document.getElementById("mainTitle");
+
+  title.classList.add("fade-out");
+  
+  setTimeout(() => {
+    title.innerHTML =
+      "🎀Правилен избор🎀<br>Благодаря ти, че внасяш светлина в живота ми всеки ден.";
+    title.classList.remove("fade-out");
+    title.classList.add("fade-in");
+  }, 450);
+  
   document.getElementById("photosBefore").classList.add("hidden");
-  document.getElementById("photoAfter").classList.remove("hidden");
+  const photoAfter = document.getElementById("photoAfter");
+  
+  photoAfter.classList.remove("hidden");
+  
+  // малко изчакване, за да се „закачи“ transition-ът
+  setTimeout(() => {
+    photoAfter.classList.add("show");
+  }, 50);
   document.getElementById("buttons").classList.add("hidden");
 
   confetti({
@@ -281,6 +354,7 @@ setInterval(createHeart, 250);
 
 </body>
 </html>
+
 
 
 
